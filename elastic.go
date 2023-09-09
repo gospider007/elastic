@@ -66,15 +66,12 @@ type SearchResult struct {
 
 func (obj *Client) Count(ctx context.Context, index string, data any) (int64, error) {
 	url := obj.baseUrl + fmt.Sprintf("/%s/_count", index)
-	jsonData, err := tools.Any2json(data)
+	rs, err := obj.reqCli.Request(ctx, "post", url, requests.RequestOption{Json: data})
 	if err != nil {
 		return 0, err
 	}
-	rs, err := obj.reqCli.Request(ctx, "post", url, requests.RequestOption{Json: jsonData.Value()})
+	jsonData, err := rs.Json()
 	if err != nil {
-		return 0, err
-	}
-	if jsonData, err = rs.Json(); err != nil {
 		return 0, err
 	}
 	if jsonData.Get("error").Exists() {
@@ -91,15 +88,11 @@ func (obj *Client) Count(ctx context.Context, index string, data any) (int64, er
 func (obj *Client) Search(ctx context.Context, index string, data any) (SearchResult, error) {
 	var searchResult SearchResult
 	url := obj.baseUrl + fmt.Sprintf("/%s/_search", index)
-	jsonData, err := tools.Any2json(data)
+	rs, err := obj.reqCli.Request(ctx, "post", url, requests.RequestOption{Json: data})
 	if err != nil {
 		return searchResult, err
 	}
-	rs, err := obj.reqCli.Request(ctx, "post", url, requests.RequestOption{Json: jsonData.Value()})
-	if err != nil {
-		return searchResult, err
-	}
-	jsonData, err = rs.Json()
+	jsonData, err := rs.Json()
 	if err != nil {
 		return searchResult, err
 	}
@@ -157,6 +150,23 @@ func (obj *Client) Upsert(ctx context.Context, updateData UpdateData, updateData
 		return obj.update(ctx, updateData, true)
 	}
 	return obj.updates(ctx, append(updateDatas, updateData), true)
+}
+func (obj *Client) delete_by_query(ctx context.Context, index string, data any) error {
+	url := obj.baseUrl + fmt.Sprintf("/%s/_delete_by_query", index)
+	rs, err := obj.reqCli.Post(ctx, url, requests.RequestOption{Json: data})
+	if err != nil {
+		return err
+	}
+	jsonData, err := rs.Json()
+	if err != nil {
+		return err
+	}
+	if jsonData.Get("error").Exists() {
+		return fmt.Errorf("%s >>> %s",
+			jsonData.Get("error.type").String(),
+			jsonData.Get("error.reason").String())
+	}
+	return nil
 }
 func (obj *Client) delete(ctx context.Context, deleteData DeleteData) error {
 	url := obj.baseUrl + fmt.Sprintf("/%s/_doc/%s", deleteData.Index, deleteData.Id)
