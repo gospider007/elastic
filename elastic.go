@@ -251,7 +251,7 @@ func (obj *Client) updates(ctx context.Context, updateDatas []UpdateData, upsert
 func NewClient(ctx context.Context, option ClientOption) (*Client, error) {
 	var client Client
 	var err error
-	if client.reqCli, err = requests.NewClient(ctx); err != nil {
+	if client.reqCli, err = requests.NewClient(ctx, requests.ClientOption{TryNum: 3}); err != nil {
 		return nil, err
 	}
 	baseUrl, err := getBaseUrl(option)
