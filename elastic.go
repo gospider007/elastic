@@ -64,20 +64,28 @@ type SearchResult struct {
 	Datas []gjson.Result
 }
 
+func (obj *Client) parseResponse(resp *requests.Response) (jsonData gjson.Result, err error) {
+	jsonData, err = resp.Json()
+	if err != nil {
+		return
+	}
+	if jsonData.Get("error").Exists() {
+		errorType := jsonData.Get("error.type").String()
+		errorReason := jsonData.Get("error.reason").String()
+		err = fmt.Errorf("%s >>> %s", errorType, errorReason)
+	}
+	return
+}
 func (obj *Client) Count(ctx context.Context, index string, data any) (int64, error) {
 	url := obj.baseUrl + fmt.Sprintf("/%s/_count", index)
 	rs, err := obj.reqCli.Request(ctx, "post", url, requests.RequestOption{Json: data})
 	if err != nil {
 		return 0, err
 	}
-	jsonData, err := rs.Json()
+
+	jsonData, err := obj.parseResponse(rs)
 	if err != nil {
 		return 0, err
-	}
-	if jsonData.Get("error").Exists() {
-		return 0, fmt.Errorf("%s >>> %s",
-			jsonData.Get("error.type").String(),
-			jsonData.Get("error.reason").String())
 	}
 	countRs := jsonData.Get("count")
 	if !countRs.Exists() {
@@ -92,14 +100,9 @@ func (obj *Client) Search(ctx context.Context, index string, data any) (SearchRe
 	if err != nil {
 		return searchResult, err
 	}
-	jsonData, err := rs.Json()
+	jsonData, err := obj.parseResponse(rs)
 	if err != nil {
 		return searchResult, err
-	}
-	if jsonData.Get("error").Exists() {
-		return searchResult, fmt.Errorf("%s >>> %s",
-			jsonData.Get("error.type").String(),
-			jsonData.Get("error.reason").String())
 	}
 	hits := jsonData.Get("hits")
 	if !hits.Exists() {
@@ -115,14 +118,9 @@ func (obj *Client) Exists(ctx context.Context, index, id string) (bool, error) {
 	if err != nil {
 		return false, err
 	}
-	jsonData, err := rs.Json()
+	jsonData, err := obj.parseResponse(rs)
 	if err != nil {
 		return false, err
-	}
-	if jsonData.Get("error").Exists() {
-		return false, fmt.Errorf("%s >>> %s",
-			jsonData.Get("error.type").String(),
-			jsonData.Get("error.reason").String())
 	}
 	countRs := jsonData.Get("count")
 	if !countRs.Exists() {
@@ -157,16 +155,8 @@ func (obj *Client) DeleteByQuery(ctx context.Context, index string, data any) er
 	if err != nil {
 		return err
 	}
-	jsonData, err := rs.Json()
-	if err != nil {
-		return err
-	}
-	if jsonData.Get("error").Exists() {
-		return fmt.Errorf("%s >>> %s",
-			jsonData.Get("error.type").String(),
-			jsonData.Get("error.reason").String())
-	}
-	return nil
+	_, err = obj.parseResponse(rs)
+	return err
 }
 func (obj *Client) delete(ctx context.Context, deleteData DeleteData) error {
 	url := obj.baseUrl + fmt.Sprintf("/%s/_doc/%s", deleteData.Index, deleteData.Id)
@@ -174,16 +164,8 @@ func (obj *Client) delete(ctx context.Context, deleteData DeleteData) error {
 	if err != nil {
 		return err
 	}
-	jsonData, err := rs.Json()
-	if err != nil {
-		return err
-	}
-	if jsonData.Get("error").Exists() {
-		return fmt.Errorf("%s >>> %s",
-			jsonData.Get("error.type").String(),
-			jsonData.Get("error.reason").String())
-	}
-	return nil
+	_, err = obj.parseResponse(rs)
+	return err
 }
 func (obj *Client) deletes(ctx context.Context, deleteDatas []DeleteData) error {
 	var body bytes.Buffer
@@ -202,16 +184,8 @@ func (obj *Client) deletes(ctx context.Context, deleteDatas []DeleteData) error 
 	if err != nil {
 		return err
 	}
-	jsonData, err := rs.Json()
-	if err != nil {
-		return err
-	}
-	if jsonData.Get("error").Exists() {
-		return fmt.Errorf("%s >>> %s",
-			jsonData.Get("error.type").String(),
-			jsonData.Get("error.reason").String())
-	}
-	return nil
+	_, err = obj.parseResponse(rs)
+	return err
 }
 func (obj *Client) update(ctx context.Context, updateData UpdateData, upsert bool) error {
 	jsonData, err := tools.Any2json(updateData.Data)
@@ -229,15 +203,8 @@ func (obj *Client) update(ctx context.Context, updateData UpdateData, upsert boo
 	if err != nil {
 		return err
 	}
-	if jsonData, err = rs.Json(); err != nil {
-		return err
-	}
-	if jsonData.Get("error").Exists() {
-		return fmt.Errorf("%s >>> %s",
-			jsonData.Get("error.type").String(),
-			jsonData.Get("error.reason").String())
-	}
-	return nil
+	_, err = obj.parseResponse(rs)
+	return err
 }
 func (obj *Client) updates(ctx context.Context, updateDatas []UpdateData, upsert bool) error {
 	var body bytes.Buffer
@@ -278,16 +245,8 @@ func (obj *Client) updates(ctx context.Context, updateDatas []UpdateData, upsert
 	if err != nil {
 		return err
 	}
-	jsonData, err := rs.Json()
-	if err != nil {
-		return err
-	}
-	if jsonData.Get("error").Exists() {
-		return fmt.Errorf("%s >>> %s",
-			jsonData.Get("error.type").String(),
-			jsonData.Get("error.reason").String())
-	}
-	return nil
+	_, err = obj.parseResponse(rs)
+	return err
 }
 func NewClient(ctx context.Context, option ClientOption) (*Client, error) {
 	var client Client
