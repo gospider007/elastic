@@ -151,7 +151,7 @@ func (obj *Client) Upsert(ctx context.Context, updateData UpdateData, updateData
 	}
 	return obj.updates(ctx, append(updateDatas, updateData), true)
 }
-func (obj *Client) delete_by_query(ctx context.Context, index string, data any) error {
+func (obj *Client) DeleteByQuery(ctx context.Context, index string, data any) error {
 	url := obj.baseUrl + fmt.Sprintf("/%s/_delete_by_query", index)
 	rs, err := obj.reqCli.Post(ctx, url, requests.RequestOption{Json: data})
 	if err != nil {
