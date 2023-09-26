@@ -9,9 +9,8 @@ import (
 	"net"
 	"strconv"
 
+	"gitee.com/baixudong/bson"
 	"gitee.com/baixudong/requests"
-	"gitee.com/baixudong/tools"
-	"github.com/tidwall/gjson"
 )
 
 type Client struct {
@@ -61,10 +60,10 @@ type DeleteData struct {
 }
 type SearchResult struct {
 	Total int64
-	Datas []gjson.Result
+	Datas []*bson.Client
 }
 
-func (obj *Client) parseResponse(resp *requests.Response) (jsonData gjson.Result, err error) {
+func (obj *Client) parseResponse(resp *requests.Response) (jsonData *bson.Client, err error) {
 	jsonData, err = resp.Json()
 	if err != nil {
 		return
@@ -188,7 +187,7 @@ func (obj *Client) deletes(ctx context.Context, deleteDatas []DeleteData) error 
 	return err
 }
 func (obj *Client) update(ctx context.Context, updateData UpdateData, upsert bool) error {
-	jsonData, err := tools.Any2json(updateData.Data)
+	jsonData, err := bson.Decode(updateData.Data)
 	if err != nil {
 		return err
 	}
@@ -213,7 +212,7 @@ func (obj *Client) updates(ctx context.Context, updateDatas []UpdateData, upsert
 		if err != nil {
 			return err
 		}
-		jsonData, err := tools.Any2json(updateData.Data)
+		jsonData, err := bson.Decode(updateData.Data)
 		if err != nil {
 			return err
 		}
