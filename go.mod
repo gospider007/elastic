@@ -3,27 +3,25 @@ module gitee.com/baixudong/elastic
 go 1.21.1
 
 require (
-	gitee.com/baixudong/bson v0.0.0-20230926055556-209f126c0a34
-	gitee.com/baixudong/requests v0.0.0-20230926060444-4935ccc458f9
+	gitee.com/baixudong/gson v0.0.0-20230927054719-a259dd672035
+	gitee.com/baixudong/requests v0.0.0-20230927080706-33c51ed9ac32
 )
 
 require (
 	gitee.com/baixudong/bar v0.0.0-20230923032414-c19cc384edeb // indirect
 	gitee.com/baixudong/blog v0.0.0-20230923032533-d83e7cb672f7 // indirect
-	gitee.com/baixudong/bs4 v0.0.0-20230923032731-cc82de4893bd // indirect
-	gitee.com/baixudong/ja3 v0.0.0-20230923032211-164f4a779e92 // indirect
+	gitee.com/baixudong/bs4 v0.0.0-20230927062753-f5145bca0107 // indirect
+	gitee.com/baixudong/ja3 v0.0.0-20230927070510-152bc4a3675a // indirect
 	gitee.com/baixudong/kinds v0.0.0-20230809033013-c3d6d3479f8c // indirect
 	gitee.com/baixudong/net v0.0.0-20230923032225-d53725e7011a // indirect
 	gitee.com/baixudong/re v0.0.0-20230809033040-360c1d945e59 // indirect
 	gitee.com/baixudong/tools v0.0.0-20230926010219-77f29cbf5935 // indirect
-	gitee.com/baixudong/websocket v0.0.0-20230926055450-da2e1353b599 // indirect
+	gitee.com/baixudong/websocket v0.0.0-20230927034519-3bef09dccc0f // indirect
 	github.com/PuerkitoBio/goquery v1.8.1 // indirect
 	github.com/andybalholm/brotli v1.0.5 // indirect
 	github.com/andybalholm/cascadia v1.3.2 // indirect
-	github.com/chenzhuoyu/iasm v0.9.0 // indirect
 	github.com/cloudflare/circl v1.3.3 // indirect
 	github.com/gaukas/godicttls v0.0.4 // indirect
-	github.com/go-playground/locales v0.14.1 // indirect
 	github.com/google/uuid v1.3.1 // indirect
 	github.com/json-iterator/go v1.1.12 // indirect
 	github.com/klauspost/compress v1.17.0 // indirect
@@ -34,7 +32,6 @@ require (
 	github.com/tidwall/gjson v1.17.0 // indirect
 	github.com/tidwall/match v1.1.1 // indirect
 	github.com/tidwall/pretty v1.2.1 // indirect
-	github.com/twitchyliquid64/golang-asm v0.15.1 // indirect
 	go.mongodb.org/mongo-driver v1.12.1 // indirect
 	go.uber.org/multierr v1.11.0 // indirect
 	go.uber.org/zap v1.26.0 // indirect

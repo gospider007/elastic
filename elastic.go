@@ -9,7 +9,7 @@ import (
 	"net"
 	"strconv"
 
-	"gitee.com/baixudong/bson"
+	"gitee.com/baixudong/gson"
 	"gitee.com/baixudong/requests"
 )
 
@@ -60,10 +60,10 @@ type DeleteData struct {
 }
 type SearchResult struct {
 	Total int64
-	Datas []*bson.Client
+	Datas []*gson.Client
 }
 
-func (obj *Client) parseResponse(resp *requests.Response) (jsonData *bson.Client, err error) {
+func (obj *Client) parseResponse(resp *requests.Response) (jsonData *gson.Client, err error) {
 	jsonData, err = resp.Json()
 	if err != nil {
 		return
@@ -187,7 +187,7 @@ func (obj *Client) deletes(ctx context.Context, deleteDatas []DeleteData) error 
 	return err
 }
 func (obj *Client) update(ctx context.Context, updateData UpdateData, upsert bool) error {
-	jsonData, err := bson.Decode(updateData.Data)
+	jsonData, err := gson.Decode(updateData.Data)
 	if err != nil {
 		return err
 	}
@@ -212,7 +212,7 @@ func (obj *Client) updates(ctx context.Context, updateDatas []UpdateData, upsert
 		if err != nil {
 			return err
 		}
-		jsonData, err := bson.Decode(updateData.Data)
+		jsonData, err := gson.Decode(updateData.Data)
 		if err != nil {
 			return err
 		}
