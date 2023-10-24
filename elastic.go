@@ -9,8 +9,8 @@ import (
 	"net"
 	"strconv"
 
-	"gitee.com/baixudong/gson"
-	"gitee.com/baixudong/requests"
+	"github.com/gospider007/gson"
+	"github.com/gospider007/requests"
 )
 
 type Client struct {
