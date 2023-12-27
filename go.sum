@@ -37,6 +37,8 @@ github.com/gospider007/gtls v0.0.0-20231215082710-ea089e961bcc h1:69I4vx/fPY5A0E
 github.com/gospider007/gtls v0.0.0-20231215082710-ea089e961bcc/go.mod h1:QoA/cKZfGzg2uNG6SqE/alXi1ONl5l17jOUn0+p/aQc=
 github.com/gospider007/ja3 v0.0.0-20231215081451-4f0f2494ca9f h1:6ti0B70R4S6eTyd06JyT4Yf1PpJsGxBeRcpiBvEu5uA=
 github.com/gospider007/ja3 v0.0.0-20231215081451-4f0f2494ca9f/go.mod h1:xGzVELcwt5tiprBlyk/X4XhnxD0aCYzSfdj06s3VjfI=
+github.com/gospider007/ja3 v0.0.0-20231218052956-f5775dfbd8c3 h1:XAUW+PhkTPwpFZKkQ9/Hf8u4KPTlRKaZL7/bhc5foko=
+github.com/gospider007/ja3 v0.0.0-20231218052956-f5775dfbd8c3/go.mod h1:dZtxNhm9/A5fhukvXfVZY3ZN+TCjQt1ObzsWQp/zLQQ=
 github.com/gospider007/kinds v0.0.0-20231024093643-7a4424f2d30e h1:lmX6IQKkrNDbXfHsvrv1Uz0MoG2v5+4VC6Gdh9irUNY=
 github.com/gospider007/kinds v0.0.0-20231024093643-7a4424f2d30e/go.mod h1:nB4OMmd8Ji92yEmgjbHcqLcBHTAhSSmlGNb2JpTYK9A=
 github.com/gospider007/net v0.0.0-20231215081728-064725ce355a h1:ZQFHnC3rVqKCVud2nhWLbwrz81PGQAiqnYH8h0a0QMY=
@@ -45,6 +47,8 @@ github.com/gospider007/re v0.0.0-20231024115818-adfd03636256 h1:Z6kHRANoWB+/4rDz
 github.com/gospider007/re v0.0.0-20231024115818-adfd03636256/go.mod h1:X58uk0/F3mVskuQOZng0ZKJiAt3ETn0wxuLN//rVZrE=
 github.com/gospider007/requests v0.0.0-20231215083622-456c10ef4ba9 h1:tPWV5seQkpN/ku7HRO5/wvtSBv2vnNtRpSbJoRiOKfE=
 github.com/gospider007/requests v0.0.0-20231215083622-456c10ef4ba9/go.mod h1:gBMHwaH12x9g1LpBU5V78WJ9RIP/3s4Eac6/K/fC2bY=
+github.com/gospider007/requests v0.0.0-20231227141429-e44ed9914a15 h1:wW8efKeZAYIbBl/Q7qB8yOU1Aig4P4xd2+4IAuOLXlI=
+github.com/gospider007/requests v0.0.0-20231227141429-e44ed9914a15/go.mod h1:0MR0CPprWEBqRDZpPw5UpWiz9eyMV0fsXKMzzkxp8JE=
 github.com/gospider007/tools v0.0.0-20231202084937-8b2bc66f8198 h1:phk1GNobIIQWL5/G5dtgs35hotucdYv2FScMjlHHZ+Q=
 github.com/gospider007/tools v0.0.0-20231202084937-8b2bc66f8198/go.mod h1:wiILK6EotceHz/Rnb6ux8PzY3sr5OV+mYuIcbtxpkYI=
 github.com/gospider007/websocket v0.0.0-20231215083826-2227da2a2a13 h1:s+qc8TnHAcc97Si5m3mpl+Q2YYm7aFEn+qElRLELisM=
@@ -79,6 +83,8 @@ github.com/quic-go/quic-go v0.40.1 h1:X3AGzUNFs0jVuO3esAGnTfvdgvL4fq655WaOi1snv1
 github.com/quic-go/quic-go v0.40.1/go.mod h1:PeN7kuVJ4xZbxSv/4OX6S1USOX8MJvydwpTx31vx60c=
 github.com/refraction-networking/utls v1.5.4 h1:9k6EO2b8TaOGsQ7Pl7p9w6PUhx18/ZCeT0WNTZ7Uw4o=
 github.com/refraction-networking/utls v1.5.4/go.mod h1:SPuDbBmgLGp8s+HLNc83FuavwZCFoMmExj+ltUHiHUw=
+github.com/refraction-networking/utls v1.6.0 h1:X5vQMqVx7dY7ehxxqkFER/W6DSjy8TMqSItXm8hRDYQ=
+github.com/refraction-networking/utls v1.6.0/go.mod h1:kHJ6R9DFFA0WsRgBM35iiDku4O7AqPR6y79iuzW7b10=
 github.com/stretchr/objx v0.1.0/go.mod h1:HFkY916IF+rwdDfMAkV7OtwuqBVzrE8GR6GFx+wExME=
 github.com/stretchr/testify v1.3.0/go.mod h1:M5WIy9Dh21IEIfnGCwXGc5bZfKNJtfHm1UVUgZn+9EI=
 github.com/stretchr/testify v1.8.4 h1:CcVxjf3Q8PM0mHUKJCdn+eZZtm5yQwehR5yeSVQQcUk=
@@ -114,8 +120,12 @@ golang.org/x/crypto v0.0.0-20210921155107-089bfa567519/go.mod h1:GvvjBRRGRdwPK5y
 golang.org/x/crypto v0.0.0-20220622213112-05595931fe9d/go.mod h1:IxCIyHEi3zRg3s0A5j5BB6A9Jmi73HwBIUl50j+osU4=
 golang.org/x/crypto v0.16.0 h1:mMMrFzRSCF0GvB7Ne27XVtVAaXLrPmgPC7/v0tkwHaY=
 golang.org/x/crypto v0.16.0/go.mod h1:gCAAfMLgwOJRpTjQ2zCCt2OcSfYMTeZVSRtQlPC7Nq4=
+golang.org/x/crypto v0.17.0 h1:r8bRNjWL3GshPW3gkd+RpvzWrZAwPS49OmTGZ/uhM4k=
+golang.org/x/crypto v0.17.0/go.mod h1:gCAAfMLgwOJRpTjQ2zCCt2OcSfYMTeZVSRtQlPC7Nq4=
 golang.org/x/exp v0.0.0-20231214170342-aacd6d4b4611 h1:qCEDpW1G+vcj3Y7Fy52pEM1AWm3abj8WimGYejI3SC4=
 golang.org/x/exp v0.0.0-20231214170342-aacd6d4b4611/go.mod h1:iRJReGqOEeBhDZGkGbynYwcHlctCvnjTYIamk7uXpHI=
+golang.org/x/exp v0.0.0-20231226003508-02704c960a9b h1:kLiC65FbiHWFAOu+lxwNPujcsl8VYyTYYEZnsOO1WK4=
+golang.org/x/exp v0.0.0-20231226003508-02704c960a9b/go.mod h1:iRJReGqOEeBhDZGkGbynYwcHlctCvnjTYIamk7uXpHI=
 golang.org/x/image v0.14.0 h1:tNgSxAFe3jC4uYqvZdTr84SZoM1KfwdC9SKIFrLjFn4=
 golang.org/x/image v0.14.0/go.mod h1:HUYqC05R2ZcZ3ejNQsIHQDQiwWM4JBqmm6MKANTp4LE=
 golang.org/x/mod v0.6.0-dev.0.20220419223038-86c51ed26bb4/go.mod h1:jJ57K6gSWd91VN4djpZkiMVwK6gcyfeH4XE8wZrZaV4=

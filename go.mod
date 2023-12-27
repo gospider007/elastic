@@ -4,7 +4,7 @@ go 1.21.3
 
 require (
 	github.com/gospider007/gson v0.0.0-20231215083934-e7762897c4db
-	github.com/gospider007/requests v0.0.0-20231215083622-456c10ef4ba9
+	github.com/gospider007/requests v0.0.0-20231227141429-e44ed9914a15
 )
 
 require (
@@ -18,7 +18,7 @@ require (
 	github.com/gospider007/blog v0.0.0-20231121084103-59a004dafccf // indirect
 	github.com/gospider007/bs4 v0.0.0-20231215085603-439260f5a702 // indirect
 	github.com/gospider007/gtls v0.0.0-20231215082710-ea089e961bcc // indirect
-	github.com/gospider007/ja3 v0.0.0-20231215081451-4f0f2494ca9f // indirect
+	github.com/gospider007/ja3 v0.0.0-20231218052956-f5775dfbd8c3 // indirect
 	github.com/gospider007/kinds v0.0.0-20231024093643-7a4424f2d30e // indirect
 	github.com/gospider007/net v0.0.0-20231215081728-064725ce355a // indirect
 	github.com/gospider007/re v0.0.0-20231024115818-adfd03636256 // indirect
@@ -33,7 +33,7 @@ require (
 	github.com/modern-go/concurrent v0.0.0-20180306012644-bacd9c7ef1dd // indirect
 	github.com/modern-go/reflect2 v1.0.2 // indirect
 	github.com/quic-go/quic-go v0.40.1 // indirect
-	github.com/refraction-networking/utls v1.5.4 // indirect
+	github.com/refraction-networking/utls v1.6.0 // indirect
 	github.com/tidwall/gjson v1.17.0 // indirect
 	github.com/tidwall/match v1.1.1 // indirect
 	github.com/tidwall/pretty v1.2.1 // indirect
@@ -41,8 +41,8 @@ require (
 	go.mongodb.org/mongo-driver v1.13.1 // indirect
 	go.uber.org/multierr v1.11.0 // indirect
 	go.uber.org/zap v1.26.0 // indirect
-	golang.org/x/crypto v0.16.0 // indirect
-	golang.org/x/exp v0.0.0-20231214170342-aacd6d4b4611 // indirect
+	golang.org/x/crypto v0.17.0 // indirect
+	golang.org/x/exp v0.0.0-20231226003508-02704c960a9b // indirect
 	golang.org/x/image v0.14.0 // indirect
 	golang.org/x/mod v0.14.0 // indirect
 	golang.org/x/net v0.19.0 // indirect
