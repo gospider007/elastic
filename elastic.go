@@ -68,10 +68,8 @@ func (obj *Client) parseResponse(resp *requests.Response) (jsonData *gson.Client
 	if err != nil {
 		return
 	}
-	if jsonData.Get("error").Exists() {
-		errorType := jsonData.Get("error.type").String()
-		errorReason := jsonData.Get("error.reason").String()
-		err = fmt.Errorf("%s >>> %s", errorType, errorReason)
+	if e := jsonData.Get("error"); e.Exists() {
+		err = errors.New(e.String())
 	}
 	return
 }
@@ -197,7 +195,7 @@ func (obj *Client) update(ctx context.Context, updateData UpdateData, upsert boo
 	if upsert {
 		body["doc_as_upsert"] = true
 	}
-	url := obj.baseUrl + fmt.Sprintf("/%s/_doc/%s/_update", updateData.Index, updateData.Id)
+	url := obj.baseUrl + fmt.Sprintf("/%s/_update/%s", updateData.Index, updateData.Id)
 	rs, err := obj.reqCli.Request(ctx, "post", url, requests.RequestOption{Json: body})
 	if err != nil {
 		return err
