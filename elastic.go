@@ -90,6 +90,11 @@ func (obj *Client) Count(ctx context.Context, index string, data any) (int64, er
 	}
 	return countRs.Int(), nil
 }
+
+func (obj *Client) Close() {
+	obj.reqCli.ForceCloseConns()
+}
+
 func (obj *Client) Search(ctx context.Context, index string, data any) (SearchResult, error) {
 	var searchResult SearchResult
 	url := obj.baseUrl + fmt.Sprintf("/%s/_search", index)
