@@ -19,11 +19,12 @@ type Client struct {
 }
 
 type ClientOption struct {
-	Host string
-	Port int
-	Usr  string
-	Pwd  string
-	Ssl  bool
+	Host  string
+	Port  int
+	Usr   string
+	Pwd   string
+	Ssl   bool
+	Proxy string
 }
 
 func getBaseUrl(option ClientOption) (string, error) {
@@ -253,7 +254,7 @@ func (obj *Client) updates(ctx context.Context, updateDatas []UpdateData, upsert
 func NewClient(ctx context.Context, option ClientOption) (*Client, error) {
 	var client Client
 	var err error
-	if client.reqCli, err = requests.NewClient(ctx, requests.ClientOption{MaxRetries: 3}); err != nil {
+	if client.reqCli, err = requests.NewClient(ctx, requests.ClientOption{MaxRetries: 3, Proxy: option.Proxy}); err != nil {
 		return nil, err
 	}
 	baseUrl, err := getBaseUrl(option)
