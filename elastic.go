@@ -134,23 +134,14 @@ func (obj *Client) Exists(ctx context.Context, index, id string) (bool, error) {
 	}
 	return false, nil
 }
-func (obj *Client) Delete(ctx context.Context, deleteData DeleteData, deleteDatas ...DeleteData) error {
-	if len(deleteDatas) == 0 {
-		return obj.delete(ctx, deleteData)
-	}
-	return obj.deletes(ctx, append(deleteDatas, deleteData))
+func (obj *Client) Delete(ctx context.Context, deleteDatas ...DeleteData) error {
+	return obj.deletes(ctx, deleteDatas...)
 }
-func (obj *Client) Update(ctx context.Context, updateData UpdateData, updateDatas ...UpdateData) error {
-	if len(updateDatas) == 0 {
-		return obj.update(ctx, updateData, false)
-	}
-	return obj.updates(ctx, append(updateDatas, updateData), false)
+func (obj *Client) Update(ctx context.Context, updateDatas ...UpdateData) error {
+	return obj.updates(ctx, false, updateDatas...)
 }
 func (obj *Client) Upsert(ctx context.Context, updateData UpdateData, updateDatas ...UpdateData) error {
-	if len(updateDatas) == 0 {
-		return obj.update(ctx, updateData, true)
-	}
-	return obj.updates(ctx, append(updateDatas, updateData), true)
+	return obj.updates(ctx, true, updateDatas...)
 }
 func (obj *Client) DeleteByQuery(ctx context.Context, index string, data any) error {
 	url := obj.baseUrl + fmt.Sprintf("/%s/_delete_by_query", index)
@@ -161,16 +152,10 @@ func (obj *Client) DeleteByQuery(ctx context.Context, index string, data any) er
 	_, err = obj.parseResponse(rs)
 	return err
 }
-func (obj *Client) delete(ctx context.Context, deleteData DeleteData) error {
-	url := obj.baseUrl + fmt.Sprintf("/%s/_doc/%s", deleteData.Index, deleteData.Id)
-	rs, err := obj.reqCli.Request(ctx, "delete", url)
-	if err != nil {
-		return err
+func (obj *Client) deletes(ctx context.Context, deleteDatas ...DeleteData) error {
+	if len(deleteDatas) == 0 {
+		return errors.New("no delete data")
 	}
-	_, err = obj.parseResponse(rs)
-	return err
-}
-func (obj *Client) deletes(ctx context.Context, deleteDatas []DeleteData) error {
 	var body bytes.Buffer
 	for _, deleteData := range deleteDatas {
 		_, err := body.WriteString(fmt.Sprintf(`{"delete":{"_index":"%s","_id":"%s"}}`, deleteData.Index, deleteData.Id))
@@ -190,26 +175,30 @@ func (obj *Client) deletes(ctx context.Context, deleteDatas []DeleteData) error 
 	_, err = obj.parseResponse(rs)
 	return err
 }
-func (obj *Client) update(ctx context.Context, updateData UpdateData, upsert bool) error {
-	jsonData, err := gson.Decode(updateData.Data)
-	if err != nil {
-		return err
+
+//	func (obj *Client) update(ctx context.Context, updateData UpdateData, upsert bool) error {
+//		jsonData, err := gson.Decode(updateData.Data)
+//		if err != nil {
+//			return err
+//		}
+//		body := map[string]any{
+//			"doc": jsonData.Value(),
+//		}
+//		if upsert {
+//			body["doc_as_upsert"] = true
+//		}
+//		url := obj.baseUrl + fmt.Sprintf("/%s/_update/%s", updateData.Index, updateData.Id)
+//		rs, err := obj.reqCli.Request(ctx, "post", url, requests.RequestOption{Json: body})
+//		if err != nil {
+//			return err
+//		}
+//		_, err = obj.parseResponse(rs)
+//		return err
+//	}
+func (obj *Client) updates(ctx context.Context, upsert bool, updateDatas ...UpdateData) error {
+	if len(updateDatas) == 0 {
+		return errors.New("no update data")
 	}
-	body := map[string]any{
-		"doc": jsonData.Value(),
-	}
-	if upsert {
-		body["doc_as_upsert"] = true
-	}
-	url := obj.baseUrl + fmt.Sprintf("/%s/_update/%s", updateData.Index, updateData.Id)
-	rs, err := obj.reqCli.Request(ctx, "post", url, requests.RequestOption{Json: body})
-	if err != nil {
-		return err
-	}
-	_, err = obj.parseResponse(rs)
-	return err
-}
-func (obj *Client) updates(ctx context.Context, updateDatas []UpdateData, upsert bool) error {
 	var body bytes.Buffer
 	for _, updateData := range updateDatas {
 		_, err := body.WriteString(fmt.Sprintf(`{"update":{"_index":"%s","_id":"%s"}}`, updateData.Index, updateData.Id))
