@@ -168,7 +168,12 @@ func (obj *Client) deletes(ctx context.Context, deleteDatas ...DeleteData) error
 		}
 	}
 	url := obj.baseUrl + "/_bulk"
-	rs, err := obj.reqCli.Request(ctx, "post", url, requests.RequestOption{Json: body.Bytes()})
+	rs, err := obj.reqCli.Request(ctx, "post", url, requests.RequestOption{
+		Body: body.Bytes(),
+		Headers: map[string]string{
+			"Content-Type": "application/x-ndjson",
+		},
+	})
 	if err != nil {
 		return err
 	}
@@ -233,7 +238,12 @@ func (obj *Client) updates(ctx context.Context, upsert bool, updateDatas ...Upda
 		}
 	}
 	url := obj.baseUrl + "/_bulk"
-	rs, err := obj.reqCli.Request(ctx, "post", url, requests.RequestOption{Json: body.Bytes()})
+	rs, err := obj.reqCli.Request(ctx, "post", url, requests.RequestOption{
+		Body: body.Bytes(),
+		Headers: map[string]string{
+			"Content-Type": "application/x-ndjson",
+		},
+	})
 	if err != nil {
 		return err
 	}
