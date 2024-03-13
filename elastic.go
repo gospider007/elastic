@@ -140,7 +140,7 @@ func (obj *Client) Delete(ctx context.Context, deleteDatas ...DeleteData) error 
 func (obj *Client) Update(ctx context.Context, updateDatas ...UpdateData) error {
 	return obj.updates(ctx, false, updateDatas...)
 }
-func (obj *Client) Upsert(ctx context.Context, updateData UpdateData, updateDatas ...UpdateData) error {
+func (obj *Client) Upsert(ctx context.Context, updateDatas ...UpdateData) error {
 	return obj.updates(ctx, true, updateDatas...)
 }
 func (obj *Client) DeleteByQuery(ctx context.Context, index string, data any) error {
