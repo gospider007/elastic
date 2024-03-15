@@ -72,6 +72,9 @@ func (obj *Client) parseResponse(resp *requests.Response) (jsonData *gson.Client
 	if e := jsonData.Get("error"); e.Exists() {
 		err = errors.New(e.String())
 	}
+	if e := jsonData.Get("errors"); e.Exists() {
+		err = errors.New(jsonData.Get("items").String())
+	}
 	return
 }
 func (obj *Client) Count(ctx context.Context, index string, data any) (int64, error) {
