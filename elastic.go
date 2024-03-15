@@ -70,10 +70,10 @@ func (obj *Client) parseResponse(resp *requests.Response) (jsonData *gson.Client
 		return
 	}
 	if e := jsonData.Get("error"); e.Exists() {
-		err = errors.New(e.String())
+		err = errors.New(jsonData.String())
 	}
-	if e := jsonData.Get("errors"); e.Exists() {
-		err = errors.New(jsonData.Get("items").String())
+	if jsonData.Get("errors").Bool() {
+		err = errors.New(jsonData.String())
 	}
 	return
 }
