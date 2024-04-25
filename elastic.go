@@ -74,6 +74,19 @@ func (obj *Client) parseResponse(resp *requests.Response) (jsonData *gson.Client
 	}
 	if jsonData.Get("errors").Bool() {
 		err = errors.New(jsonData.String())
+		if ierrs := jsonData.Get("items").Array(); len(ierrs) > 0 {
+			ignoreError := true
+			for _, ierr := range ierrs {
+				errorType := ierr.Get("update.error.type").String()
+				if errorType != "version_conflict_engine_exception" {
+					ignoreError = false
+					break
+				}
+			}
+			if ignoreError {
+				err = nil
+			}
+		}
 	}
 	return
 }
