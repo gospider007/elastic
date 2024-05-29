@@ -13,6 +13,62 @@ import (
 	"github.com/gospider007/requests"
 )
 
+type Query struct {
+	query map[string]any
+}
+
+func NewQuery() *Query {
+	return &Query{
+		query: make(map[string]any),
+	}
+}
+func (obj *Query) AddRange(ranges ...map[string]any) {
+	ran, ok := obj.query["range"]
+	if ok {
+		obj.query["range"] = append(ran.([]map[string]any), ranges...)
+	} else {
+		obj.query["range"] = ranges
+	}
+}
+func (obj *Query) AddFilter(filters ...map[string]any) {
+	filter, ok := obj.query["filter"]
+	if ok {
+		obj.query["filter"] = append(filter.([]map[string]any), filters...)
+	} else {
+		obj.query["filter"] = filters
+	}
+}
+func (obj *Query) AddMust(musts ...map[string]any) {
+	must, ok := obj.query["must"]
+	if ok {
+		obj.query["must"] = append(must.([]map[string]any), musts...)
+	} else {
+		obj.query["must"] = musts
+	}
+}
+func (obj *Query) AddMustNot(musts ...map[string]any) {
+	must_not, ok := obj.query["must_not"]
+	if ok {
+		obj.query["must_not"] = append(must_not.([]map[string]any), musts...)
+	} else {
+		obj.query["must_not"] = musts
+	}
+}
+func (obj *Query) AddShoud(shoulds ...map[string]any) {
+	should, ok := obj.query["should"]
+	if ok {
+		obj.query["should"] = append(should.([]map[string]any), shoulds...)
+	} else {
+		obj.query["should"] = shoulds
+	}
+	obj.query["minimum_should_match"] = 1
+}
+func (obj *Query) Query() map[string]any {
+	return map[string]any{
+		"bool": obj.query,
+	}
+}
+
 type Client struct {
 	reqCli  *requests.Client
 	baseUrl string
