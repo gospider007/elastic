@@ -6,6 +6,7 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
+	"log"
 	"net"
 	"strconv"
 
@@ -119,8 +120,261 @@ type SearchResult struct {
 	Total int64
 	Datas []*gson.Client
 }
+type SearchResults struct {
+	scroll_id string
+	datas     []*gson.Client
+	init      bool
+	client    *Client
+	err       error
+	closed    bool
+}
 
-func (obj *Client) parseResponse(resp *requests.Response) (jsonData *gson.Client, err error) {
+func (obj *SearchResults) Next(ctx context.Context) (ok bool) {
+	if obj.closed {
+		return false
+	}
+	if !obj.init {
+		obj.init = true
+	} else {
+		obj.scroll_id, obj.err = obj.scroll(ctx)
+	}
+	if len(obj.datas) == 0 || obj.err != nil {
+		obj.closed = true
+		ok = false
+	} else {
+		ok = true
+	}
+	if obj.closed {
+		obj.Close()
+	}
+	return
+}
+
+func (obj *SearchResults) scroll(ctx context.Context) (scroll_id string, err error) {
+	defer func() {
+		if scroll_id != obj.scroll_id {
+			obj.Close()
+		}
+	}()
+	data := map[string]any{
+		"scroll":    "5m",
+		"scroll_id": obj.scroll_id,
+	}
+	href := obj.client.baseUrl + "/_search/scroll"
+	jsonData, err := obj.client.search(ctx, "post", href, data)
+	if err != nil {
+		return "", err
+	}
+	scroll_id = jsonData.Get("_scroll_id").String()
+	obj.datas = jsonData.Get("hits.hits").Array()
+	log.Print(len(obj.datas))
+	return scroll_id, nil
+}
+func (obj *SearchResults) Datas() []*gson.Client {
+	if !obj.init {
+		return nil
+	}
+	return obj.datas
+}
+func (obj *SearchResults) Error() error {
+	return obj.err
+}
+func (obj *SearchResults) Close() error {
+	if obj.scroll_id == "" {
+		return nil
+	}
+	log.Print("close scroll: ", obj.scroll_id)
+	data := map[string]any{
+		"scroll_id": []string{
+			obj.scroll_id,
+		},
+	}
+	href := obj.client.baseUrl + "/_search/scroll"
+	_, err := obj.client.search(context.TODO(), "delete", href, data)
+	return err
+}
+func (obj *Client) Count(ctx context.Context, index string, data any) (int64, error) {
+	href := obj.baseUrl + fmt.Sprintf("/%s/_count", index)
+	jsonData, err := obj.search(ctx, "post", href, data)
+	if err != nil {
+		return 0, err
+	}
+	countRs := jsonData.Get("count")
+	if !countRs.Exists() {
+		return 0, errors.New("not found count")
+	}
+	return countRs.Int(), nil
+}
+
+func (obj *Client) Close() {
+	obj.reqCli.ForceCloseConns()
+}
+
+func (obj *Client) Search(ctx context.Context, index string, data any) (SearchResult, error) {
+	var searchResult SearchResult
+	href := obj.baseUrl + fmt.Sprintf("/%s/_search", index)
+
+	jsonData, err := obj.search(ctx, "post", href, data)
+	if err != nil {
+		return searchResult, err
+	}
+	hits := jsonData.Get("hits")
+	if !hits.Exists() {
+		return searchResult, errors.New("not found hits")
+	}
+	searchResult.Total = hits.Get("total.value").Int()
+	searchResult.Datas = hits.Get("hits").Array()
+	return searchResult, nil
+}
+func (obj *Client) Searchs(ctx context.Context, index string, data any) (*SearchResults, error) {
+	href := obj.baseUrl + fmt.Sprintf("/%s/_search?scroll=5m", index)
+	jsonData, err := obj.search(ctx, "post", href, data)
+	if err != nil {
+		return nil, err
+	}
+	hits := jsonData.Get("hits")
+	if !hits.Exists() {
+		return nil, errors.New("not found hits")
+	}
+	return &SearchResults{
+		scroll_id: jsonData.Get("_scroll_id").String(),
+		datas:     hits.Get("hits").Array(),
+		client:    obj,
+	}, nil
+}
+
+func (obj *Client) Exists(ctx context.Context, index, id string) (bool, error) {
+	href := obj.baseUrl + fmt.Sprintf("/%s/_count?q=_id:%s", index, id)
+	jsonData, err := obj.search(ctx, "get", href, nil)
+	if err != nil {
+		return false, err
+	}
+	countRs := jsonData.Get("count")
+	if !countRs.Exists() {
+		return false, errors.New("not found count")
+	}
+	if countRs.Int() > 0 {
+		return true, nil
+	}
+	return false, nil
+}
+func (obj *Client) Delete(ctx context.Context, deleteDatas ...DeleteData) error {
+	bulkDatas := []BulkData{}
+	for _, data := range deleteDatas {
+		bulkData := BulkData{
+			Method: Delete,
+			Index:  data.Index,
+			Id:     data.Id,
+		}
+		bulkDatas = append(bulkDatas, bulkData)
+	}
+	return obj.Bulk(ctx, bulkDatas...)
+}
+func (obj *Client) Update(ctx context.Context, updateDatas ...UpdateData) error {
+	bulkDatas := []BulkData{}
+	for _, data := range updateDatas {
+		bulkData := BulkData{
+			Method: Update,
+			Index:  data.Index,
+			Id:     data.Id,
+			Data:   data.Data,
+		}
+		bulkDatas = append(bulkDatas, bulkData)
+	}
+	return obj.Bulk(ctx, bulkDatas...)
+}
+func (obj *Client) Upsert(ctx context.Context, updateDatas ...UpdateData) error {
+	bulkDatas := []BulkData{}
+	for _, data := range updateDatas {
+		bulkData := BulkData{
+			Method: Upsert,
+			Index:  data.Index,
+			Id:     data.Id,
+			Data:   data.Data,
+		}
+		bulkDatas = append(bulkDatas, bulkData)
+	}
+	return obj.Bulk(ctx, bulkDatas...)
+}
+func (obj *Client) DeleteByQuery(ctx context.Context, index string, data any) error {
+	href := obj.baseUrl + fmt.Sprintf("/%s/_delete_by_query", index)
+	_, err := obj.search(ctx, "post", href, data)
+	return err
+}
+
+type Method int
+
+const (
+	Update Method = iota
+	Upsert
+	Delete
+	Insert
+)
+
+type BulkData struct {
+	Method Method
+	Index  string
+	Id     string
+	Data   any
+}
+
+func (obj *Client) Bulk(ctx context.Context, bulkDatas ...BulkData) error {
+	if len(bulkDatas) == 0 {
+		return nil
+	}
+	var body bytes.Buffer
+	for _, bulkData := range bulkDatas {
+		var method string
+		switch bulkData.Method {
+		case Update, Upsert:
+			method = "update"
+		}
+		_, err := body.WriteString(fmt.Sprintf(`{"%s":{"_index":"%s","_id":"%s"}}`, method, bulkData.Index, bulkData.Id))
+		if err != nil {
+			return err
+		}
+		if bulkData.Data != nil {
+			jsonData, err := gson.Decode(bulkData.Data)
+			if err != nil {
+				return err
+			}
+			tempBody := map[string]any{
+				"doc": jsonData.Value(),
+			}
+			if bulkData.Method == Upsert {
+				tempBody["doc_as_upsert"] = true
+			}
+			con, err := json.Marshal(tempBody)
+			if err != nil {
+				return err
+			}
+			_, err = body.WriteString("\n")
+			if err != nil {
+				return err
+			}
+			_, err = body.Write(con)
+			if err != nil {
+				return err
+			}
+		}
+		_, err = body.WriteString("\n")
+		if err != nil {
+			return err
+		}
+	}
+	_, err := obj.search(ctx, "post", obj.baseUrl+"/_bulk", body.Bytes())
+	return err
+}
+func (obj *Client) search(ctx context.Context, method string, href string, body any) (jsonData *gson.Client, err error) {
+	resp, err := obj.reqCli.Request(ctx, method, href, requests.RequestOption{
+		Body: body,
+		Headers: map[string]string{
+			"Content-Type": "application/x-ndjson",
+		},
+	})
+	if err != nil {
+		return nil, err
+	}
 	jsonData, err = resp.Json()
 	if err != nil {
 		return
@@ -145,182 +399,6 @@ func (obj *Client) parseResponse(resp *requests.Response) (jsonData *gson.Client
 		}
 	}
 	return
-}
-func (obj *Client) Count(ctx context.Context, index string, data any) (int64, error) {
-	url := obj.baseUrl + fmt.Sprintf("/%s/_count", index)
-	rs, err := obj.reqCli.Request(ctx, "post", url, requests.RequestOption{Json: data})
-	if err != nil {
-		return 0, err
-	}
-
-	jsonData, err := obj.parseResponse(rs)
-	if err != nil {
-		return 0, err
-	}
-	countRs := jsonData.Get("count")
-	if !countRs.Exists() {
-		return 0, errors.New("not found count")
-	}
-	return countRs.Int(), nil
-}
-
-func (obj *Client) Close() {
-	obj.reqCli.ForceCloseConns()
-}
-
-func (obj *Client) Search(ctx context.Context, index string, data any) (SearchResult, error) {
-	var searchResult SearchResult
-	url := obj.baseUrl + fmt.Sprintf("/%s/_search", index)
-	rs, err := obj.reqCli.Request(ctx, "post", url, requests.RequestOption{Json: data})
-	if err != nil {
-		return searchResult, err
-	}
-	jsonData, err := obj.parseResponse(rs)
-	if err != nil {
-		return searchResult, err
-	}
-	hits := jsonData.Get("hits")
-	if !hits.Exists() {
-		return searchResult, errors.New("not found hits")
-	}
-	searchResult.Total = hits.Get("total.value").Int()
-	searchResult.Datas = hits.Get("hits").Array()
-	return searchResult, nil
-}
-func (obj *Client) Exists(ctx context.Context, index, id string) (bool, error) {
-	url := obj.baseUrl + fmt.Sprintf("/%s/_count?q=_id:%s", index, id)
-	rs, err := obj.reqCli.Request(ctx, "get", url)
-	if err != nil {
-		return false, err
-	}
-	jsonData, err := obj.parseResponse(rs)
-	if err != nil {
-		return false, err
-	}
-	countRs := jsonData.Get("count")
-	if !countRs.Exists() {
-		return false, errors.New("not found count")
-	}
-	if countRs.Int() > 0 {
-		return true, nil
-	}
-	return false, nil
-}
-func (obj *Client) Delete(ctx context.Context, deleteDatas ...DeleteData) error {
-	return obj.deletes(ctx, deleteDatas...)
-}
-func (obj *Client) Update(ctx context.Context, updateDatas ...UpdateData) error {
-	return obj.updates(ctx, false, updateDatas...)
-}
-func (obj *Client) Upsert(ctx context.Context, updateDatas ...UpdateData) error {
-	return obj.updates(ctx, true, updateDatas...)
-}
-func (obj *Client) DeleteByQuery(ctx context.Context, index string, data any) error {
-	url := obj.baseUrl + fmt.Sprintf("/%s/_delete_by_query", index)
-	rs, err := obj.reqCli.Post(ctx, url, requests.RequestOption{Json: data})
-	if err != nil {
-		return err
-	}
-	_, err = obj.parseResponse(rs)
-	return err
-}
-func (obj *Client) deletes(ctx context.Context, deleteDatas ...DeleteData) error {
-	if len(deleteDatas) == 0 {
-		return errors.New("no delete data")
-	}
-	var body bytes.Buffer
-	for _, deleteData := range deleteDatas {
-		_, err := body.WriteString(fmt.Sprintf(`{"delete":{"_index":"%s","_id":"%s"}}`, deleteData.Index, deleteData.Id))
-		if err != nil {
-			return err
-		}
-		_, err = body.WriteString("\n")
-		if err != nil {
-			return err
-		}
-	}
-	url := obj.baseUrl + "/_bulk"
-	rs, err := obj.reqCli.Request(ctx, "post", url, requests.RequestOption{
-		Body: body.Bytes(),
-		Headers: map[string]string{
-			"Content-Type": "application/x-ndjson",
-		},
-	})
-	if err != nil {
-		return err
-	}
-	_, err = obj.parseResponse(rs)
-	return err
-}
-
-//	func (obj *Client) update(ctx context.Context, updateData UpdateData, upsert bool) error {
-//		jsonData, err := gson.Decode(updateData.Data)
-//		if err != nil {
-//			return err
-//		}
-//		body := map[string]any{
-//			"doc": jsonData.Value(),
-//		}
-//		if upsert {
-//			body["doc_as_upsert"] = true
-//		}
-//		url := obj.baseUrl + fmt.Sprintf("/%s/_update/%s", updateData.Index, updateData.Id)
-//		rs, err := obj.reqCli.Request(ctx, "post", url, requests.RequestOption{Json: body})
-//		if err != nil {
-//			return err
-//		}
-//		_, err = obj.parseResponse(rs)
-//		return err
-//	}
-func (obj *Client) updates(ctx context.Context, upsert bool, updateDatas ...UpdateData) error {
-	if len(updateDatas) == 0 {
-		return errors.New("no update data")
-	}
-	var body bytes.Buffer
-	for _, updateData := range updateDatas {
-		_, err := body.WriteString(fmt.Sprintf(`{"update":{"_index":"%s","_id":"%s"}}`, updateData.Index, updateData.Id))
-		if err != nil {
-			return err
-		}
-		jsonData, err := gson.Decode(updateData.Data)
-		if err != nil {
-			return err
-		}
-		tempBody := map[string]any{
-			"doc": jsonData.Value(),
-		}
-		if upsert {
-			tempBody["doc_as_upsert"] = true
-		}
-		con, err := json.Marshal(tempBody)
-		if err != nil {
-			return err
-		}
-		_, err = body.WriteString("\n")
-		if err != nil {
-			return err
-		}
-		_, err = body.Write(con)
-		if err != nil {
-			return err
-		}
-		_, err = body.WriteString("\n")
-		if err != nil {
-			return err
-		}
-	}
-	url := obj.baseUrl + "/_bulk"
-	rs, err := obj.reqCli.Request(ctx, "post", url, requests.RequestOption{
-		Body: body.Bytes(),
-		Headers: map[string]string{
-			"Content-Type": "application/x-ndjson",
-		},
-	})
-	if err != nil {
-		return err
-	}
-	_, err = obj.parseResponse(rs)
-	return err
 }
 func NewClient(ctx context.Context, option ClientOption) (*Client, error) {
 	var client Client
