@@ -328,6 +328,12 @@ func (obj *Client) Bulk(ctx context.Context, bulkDatas ...BulkData) error {
 		switch bulkData.Method {
 		case Update, Upsert:
 			method = "update"
+		case Delete:
+			method = "delete"
+		case Insert:
+			method = "create"
+		default:
+			return errors.New("invalid method")
 		}
 		_, err := body.WriteString(fmt.Sprintf(`{"%s":{"_index":"%s","_id":"%s"}}`, method, bulkData.Index, bulkData.Id))
 		if err != nil {
