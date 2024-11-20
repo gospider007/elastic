@@ -6,6 +6,7 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
+	"iter"
 	"log"
 	"net"
 	"strconv"
@@ -145,15 +146,28 @@ func (obj *SearchResults) Next(ctx context.Context) (ok bool) {
 		ok = true
 	}
 	if obj.closed {
-		obj.Close()
+		obj.Close(ctx)
 	}
 	return
+}
+
+func (obj *SearchResults) Range(ctx context.Context) iter.Seq[*gson.Client] {
+	return func(yield func(*gson.Client) bool) {
+		defer obj.Close(ctx)
+		for obj.Next(ctx) {
+			for _, data := range obj.datas {
+				if !yield(data) {
+					return
+				}
+			}
+		}
+	}
 }
 
 func (obj *SearchResults) scroll(ctx context.Context) (scroll_id string, err error) {
 	defer func() {
 		if scroll_id != obj.scroll_id {
-			obj.Close()
+			obj.Close(ctx)
 		}
 	}()
 	data := map[string]any{
@@ -167,7 +181,7 @@ func (obj *SearchResults) scroll(ctx context.Context) (scroll_id string, err err
 	}
 	scroll_id = jsonData.Get("_scroll_id").String()
 	obj.datas = jsonData.Get("hits.hits").Array()
-	log.Print(len(obj.datas))
+	// log.Print(len(obj.datas))
 	return scroll_id, nil
 }
 func (obj *SearchResults) Datas() []*gson.Client {
@@ -179,7 +193,7 @@ func (obj *SearchResults) Datas() []*gson.Client {
 func (obj *SearchResults) Error() error {
 	return obj.err
 }
-func (obj *SearchResults) Close() error {
+func (obj *SearchResults) Close(ctx context.Context) error {
 	if obj.scroll_id == "" {
 		return nil
 	}
@@ -190,7 +204,7 @@ func (obj *SearchResults) Close() error {
 		},
 	}
 	href := obj.client.baseUrl + "/_search/scroll"
-	_, err := obj.client.search(context.TODO(), "delete", href, data)
+	_, err := obj.client.search(ctx, "delete", href, data)
 	return err
 }
 func (obj *Client) Count(ctx context.Context, index string, data any) (int64, error) {
