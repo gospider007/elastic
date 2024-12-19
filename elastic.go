@@ -118,8 +118,9 @@ type DeleteData struct {
 	Id    string
 }
 type SearchResult struct {
-	Total int64
-	Datas []*gson.Client
+	Total        int64
+	Datas        []*gson.Client
+	Aggregations map[string]*gson.Client
 }
 type SearchResults struct {
 	scroll_id    string
@@ -246,6 +247,7 @@ func (obj *Client) Search(ctx context.Context, index string, data any) (SearchRe
 	}
 	searchResult.Total = hits.Get("total.value").Int()
 	searchResult.Datas = hits.Get("hits").Array()
+	searchResult.Aggregations = hits.Get("aggregations").Map()
 	return searchResult, nil
 }
 func (obj *Client) Searchs(ctx context.Context, index string, data any) (*SearchResults, error) {
