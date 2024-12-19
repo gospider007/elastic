@@ -122,12 +122,13 @@ type SearchResult struct {
 	Datas []*gson.Client
 }
 type SearchResults struct {
-	scroll_id string
-	datas     []*gson.Client
-	init      bool
-	client    *Client
-	err       error
-	closed    bool
+	scroll_id    string
+	datas        []*gson.Client
+	aggregations map[string]*gson.Client
+	init         bool
+	client       *Client
+	err          error
+	closed       bool
 }
 
 func (obj *SearchResults) Next(ctx context.Context) (ok bool) {
@@ -181,6 +182,7 @@ func (obj *SearchResults) scroll(ctx context.Context) (scroll_id string, err err
 	}
 	scroll_id = jsonData.Get("_scroll_id").String()
 	obj.datas = jsonData.Get("hits.hits").Array()
+	obj.aggregations = jsonData.Get("aggregations").Map()
 	// log.Print(len(obj.datas))
 	return scroll_id, nil
 }
@@ -189,6 +191,12 @@ func (obj *SearchResults) Datas() []*gson.Client {
 		return nil
 	}
 	return obj.datas
+}
+func (obj *SearchResults) Aggregations() map[string]*gson.Client {
+	if !obj.init {
+		return nil
+	}
+	return obj.aggregations
 }
 func (obj *SearchResults) Error() error {
 	return obj.err

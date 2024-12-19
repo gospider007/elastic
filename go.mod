@@ -4,7 +4,7 @@ go 1.23.0
 
 require (
 	github.com/gospider007/gson v0.0.0-20241216122450-fb66d0ba2a07
-	github.com/gospider007/requests v0.0.0-20241216142545-3c4eacf66087
+	github.com/gospider007/requests v0.0.0-20241217053005-71a69f933a31
 )
 
 require (
@@ -32,7 +32,7 @@ require (
 	github.com/gospider007/http3 v0.0.0-20241215120136-980caa047c47 // indirect
 	github.com/gospider007/ja3 v0.0.0-20241216123149-83352be79439 // indirect
 	github.com/gospider007/kinds v0.0.0-20240929092451-8f867acde255 // indirect
-	github.com/gospider007/re v0.0.0-20240227100911-e27255e48eff // indirect
+	github.com/gospider007/re v0.0.0-20241216142712-efbef8d55ea2 // indirect
 	github.com/gospider007/tools v0.0.0-20241216141313-4a832f55a843 // indirect
 	github.com/gospider007/websocket v0.0.0-20241216130619-89829336d9a6 // indirect
 	github.com/hashicorp/errwrap v1.1.0 // indirect
@@ -69,10 +69,10 @@ require (
 	go.uber.org/zap v1.27.0 // indirect
 	go4.org v0.0.0-20230225012048-214862532bf5 // indirect
 	golang.org/x/crypto v0.31.0 // indirect
-	golang.org/x/exp v0.0.0-20241215155358-4a5509556b9e // indirect
+	golang.org/x/exp v0.0.0-20241217172543-b2144cdd0a67 // indirect
 	golang.org/x/image v0.23.0 // indirect
 	golang.org/x/mod v0.22.0 // indirect
-	golang.org/x/net v0.32.0 // indirect
+	golang.org/x/net v0.33.0 // indirect
 	golang.org/x/sync v0.10.0 // indirect
 	golang.org/x/sys v0.28.0 // indirect
 	golang.org/x/text v0.21.0 // indirect
