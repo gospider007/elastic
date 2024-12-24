@@ -4,14 +4,14 @@ go 1.23.0
 
 require (
 	github.com/gospider007/gson v0.0.0-20241216122450-fb66d0ba2a07
-	github.com/gospider007/requests v0.0.0-20241217053005-71a69f933a31
+	github.com/gospider007/requests v0.0.0-20241223133547-a8b19ecde0be
 )
 
 require (
 	github.com/PuerkitoBio/goquery v1.10.0 // indirect
 	github.com/STARRY-S/zip v0.2.1 // indirect
 	github.com/andybalholm/brotli v1.1.1 // indirect
-	github.com/andybalholm/cascadia v1.3.2 // indirect
+	github.com/andybalholm/cascadia v1.3.3 // indirect
 	github.com/bodgit/plumbing v1.3.0 // indirect
 	github.com/bodgit/sevenzip v1.6.0 // indirect
 	github.com/bodgit/windows v1.0.1 // indirect
@@ -28,7 +28,7 @@ require (
 	github.com/gospider007/blog v0.0.0-20241205091827-6bcaf48620d4 // indirect
 	github.com/gospider007/bs4 v0.0.0-20241216122612-aa3f29179e6f // indirect
 	github.com/gospider007/gtls v0.0.0-20241216053748-dc1a232bb017 // indirect
-	github.com/gospider007/http2 v0.0.0-20241216122734-aa1047df028c // indirect
+	github.com/gospider007/http2 v0.0.0-20241222151842-034aa1d46e9d // indirect
 	github.com/gospider007/http3 v0.0.0-20241215120136-980caa047c47 // indirect
 	github.com/gospider007/ja3 v0.0.0-20241216123149-83352be79439 // indirect
 	github.com/gospider007/kinds v0.0.0-20240929092451-8f867acde255 // indirect
@@ -49,7 +49,7 @@ require (
 	github.com/modern-go/concurrent v0.0.0-20180306012644-bacd9c7ef1dd // indirect
 	github.com/modern-go/reflect2 v1.0.2 // indirect
 	github.com/nwaples/rardecode/v2 v2.0.1 // indirect
-	github.com/onsi/ginkgo/v2 v2.22.0 // indirect
+	github.com/onsi/ginkgo/v2 v2.22.1 // indirect
 	github.com/pierrec/lz4/v4 v4.1.22 // indirect
 	github.com/quic-go/qpack v0.5.1 // indirect
 	github.com/quic-go/quic-go v0.48.2 // indirect
