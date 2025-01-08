@@ -398,8 +398,10 @@ func (obj *Client) Bulk(ctx context.Context, bulkDatas ...BulkData) error {
 func (obj *Client) search(ctx context.Context, method string, href string, body any) (jsonData *gson.Client, err error) {
 	resp, err := obj.reqCli.Request(ctx, method, href, requests.RequestOption{
 		Body: body,
-		Headers: map[string]string{
-			"Content-Type": "application/x-ndjson",
+		ClientOption: requests.ClientOption{
+			Headers: map[string]string{
+				"Content-Type": "application/x-ndjson",
+			},
 		},
 	})
 	if err != nil {
