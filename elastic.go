@@ -230,7 +230,7 @@ func (obj *Client) Count(ctx context.Context, index string, data any) (int64, er
 }
 
 func (obj *Client) Close() {
-	obj.reqCli.ForceCloseConns()
+	obj.reqCli.CloseConns()
 }
 
 func (obj *Client) Search(ctx context.Context, index string, data any) (SearchResult, error) {
