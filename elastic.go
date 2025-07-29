@@ -184,7 +184,6 @@ func (obj *SearchResults) scroll(ctx context.Context) (scroll_id string, err err
 	scroll_id = jsonData.Get("_scroll_id").String()
 	obj.datas = jsonData.Get("hits.hits").Array()
 	obj.aggregations = jsonData.Get("aggregations").Map()
-	// log.Print(len(obj.datas))
 	return scroll_id, nil
 }
 func (obj *SearchResults) Datas() []*gson.Client {
@@ -247,7 +246,7 @@ func (obj *Client) Search(ctx context.Context, index string, data any) (SearchRe
 	}
 	searchResult.Total = hits.Get("total.value").Int()
 	searchResult.Datas = hits.Get("hits").Array()
-	searchResult.Aggregations = hits.Get("aggregations").Map()
+	searchResult.Aggregations = jsonData.Get("aggregations").Map()
 	return searchResult, nil
 }
 func (obj *Client) Searchs(ctx context.Context, index string, data any) (*SearchResults, error) {
@@ -397,12 +396,8 @@ func (obj *Client) Bulk(ctx context.Context, bulkDatas ...BulkData) error {
 }
 func (obj *Client) search(ctx context.Context, method string, href string, body any) (jsonData *gson.Client, err error) {
 	resp, err := obj.reqCli.Request(ctx, method, href, requests.RequestOption{
-		Body: body,
-		ClientOption: requests.ClientOption{
-			Headers: map[string]string{
-				"Content-Type": "application/x-ndjson",
-			},
-		},
+		Body:        body,
+		ContentType: "application/x-ndjson",
 	})
 	if err != nil {
 		return nil, err
