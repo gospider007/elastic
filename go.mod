@@ -30,7 +30,7 @@ require (
 	github.com/gospider007/gtls v0.0.0-20251210003351-d6a332efe3d9 // indirect
 	github.com/gospider007/http1 v0.0.0-20251210145155-d2f328f79261 // indirect
 	github.com/gospider007/http2 v0.0.0-20251210145238-2163abd88362 // indirect
-	github.com/gospider007/http3 v0.0.0-20251210095639-06d2abac7c6f // indirect
+	github.com/gospider007/http3 v0.0.0-20251210145258-b09aaf3704c1 // indirect
 	github.com/gospider007/ja3 v0.0.0-20251210003307-e9b147716b45 // indirect
 	github.com/gospider007/kinds v0.0.0-20250815031133-b2282666f69c // indirect
 	github.com/gospider007/netx v0.0.0-20251210145239-e6e090ccbce2 // indirect
