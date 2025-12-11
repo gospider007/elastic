@@ -4,7 +4,7 @@ go 1.25.0
 
 require (
 	github.com/gospider007/gson v0.0.0-20251211084510-ba906b2318d6
-	github.com/gospider007/requests v0.0.0-20251211084515-fa4c6246eeae
+	github.com/gospider007/requests v0.0.0-20251211084719-84c4f1e3d681
 )
 
 require (
@@ -36,7 +36,7 @@ require (
 	github.com/gospider007/netx v0.0.0-20251210145323-b978e3f0b531 // indirect
 	github.com/gospider007/re v0.0.0-20250815031101-a57caeff73bf // indirect
 	github.com/gospider007/tools v0.0.0-20251209055936-a37812a2b732 // indirect
-	github.com/gospider007/websocket v0.0.0-20251209060218-5905aeb62d8f // indirect
+	github.com/gospider007/websocket v0.0.0-20251211084630-d7ced0229629 // indirect
 	github.com/json-iterator/go v1.1.12 // indirect
 	github.com/klauspost/compress v1.18.2 // indirect
 	github.com/klauspost/cpuid/v2 v2.3.0 // indirect
