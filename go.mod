@@ -3,8 +3,8 @@ module github.com/gospider007/elastic
 go 1.25.0
 
 require (
-	github.com/gospider007/gson v0.0.0-20251212071250-dba37e9351d3
-	github.com/gospider007/requests v0.0.0-20251212071544-ebae21150df9
+	github.com/gospider007/gson v0.0.0-20251212071615-e48ad37a0a39
+	github.com/gospider007/requests v0.0.0-20251212071734-a720a9b1af69
 )
 
 require (
@@ -33,10 +33,10 @@ require (
 	github.com/gospider007/http3 v0.0.0-20251212071616-2577b97682cc // indirect
 	github.com/gospider007/ja3 v0.0.0-20251212071444-ee46031ce693 // indirect
 	github.com/gospider007/kinds v0.0.0-20250815031133-b2282666f69c // indirect
-	github.com/gospider007/netx v0.0.0-20251212071616-60feb8ffb18e // indirect
+	github.com/gospider007/netx v0.0.0-20251212071803-6c916d7a5bba // indirect
 	github.com/gospider007/re v0.0.0-20251212071142-f56bce921150 // indirect
 	github.com/gospider007/tools v0.0.0-20251212071315-d05548ab517e // indirect
-	github.com/gospider007/websocket v0.0.0-20251212071347-cda2a9dc7be4 // indirect
+	github.com/gospider007/websocket v0.0.0-20251212071726-eed38e6884bd // indirect
 	github.com/json-iterator/go v1.1.12 // indirect
 	github.com/klauspost/compress v1.18.2 // indirect
 	github.com/klauspost/cpuid/v2 v2.3.0 // indirect
