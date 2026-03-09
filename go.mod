@@ -3,8 +3,8 @@ module github.com/gospider007/elastic
 go 1.26.0
 
 require (
-	github.com/gospider007/gson v0.0.0-20260309075232-cb256ef76ccd
-	github.com/gospider007/requests v0.0.0-20260309075535-4a91914b26b6
+	github.com/gospider007/gson v0.0.0-20260309090150-5700fd0b03cc
+	github.com/gospider007/requests v0.0.0-20260309090150-5e6feb28fbcf
 )
 
 require (
