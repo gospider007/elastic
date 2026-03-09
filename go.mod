@@ -4,7 +4,7 @@ go 1.26.0
 
 require (
 	github.com/gospider007/gson v0.0.0-20260304014954-04eb162a02af
-	github.com/gospider007/requests v0.0.0-20260305074541-0b6010e15ceb
+	github.com/gospider007/requests v0.0.0-20260309023955-8b360cc6dce8
 )
 
 require (
@@ -27,13 +27,13 @@ require (
 	github.com/gospider007/blog v0.0.0-20260211060835-ce5fbca77b83 // indirect
 	github.com/gospider007/bs4 v0.0.0-20260304014955-7bc863736988 // indirect
 	github.com/gospider007/conf v0.0.0-20260304014953-1bc774a8226f // indirect
-	github.com/gospider007/gtls v0.0.0-20260304015036-a997602ca753 // indirect
-	github.com/gospider007/http1 v0.0.0-20260305073746-9700fdc09414 // indirect
-	github.com/gospider007/http2 v0.0.0-20260305074427-16b3cbf55c3f // indirect
-	github.com/gospider007/http3 v0.0.0-20260305074428-d0773a358a22 // indirect
-	github.com/gospider007/ja3 v0.0.0-20260304014955-6843df4d7e08 // indirect
+	github.com/gospider007/gtls v0.0.0-20260309024111-05272148c1d4 // indirect
+	github.com/gospider007/http1 v0.0.0-20260309023954-f10e8ad89be6 // indirect
+	github.com/gospider007/http2 v0.0.0-20260309024114-172bf2804089 // indirect
+	github.com/gospider007/http3 v0.0.0-20260309024108-5d1897a93dea // indirect
+	github.com/gospider007/ja3 v0.0.0-20260309023952-c902f978357c // indirect
 	github.com/gospider007/kinds v0.0.0-20260211060834-06a10e2431d8 // indirect
-	github.com/gospider007/netx v0.0.0-20260305074514-7323def1e6b6 // indirect
+	github.com/gospider007/netx v0.0.0-20260309023954-3706b35b385b // indirect
 	github.com/gospider007/re v0.0.0-20260227072205-6223d82a3dab // indirect
 	github.com/gospider007/tools v0.0.0-20260304014714-6d157d4524d2 // indirect
 	github.com/gospider007/websocket v0.0.0-20260304015108-407b25dd1683 // indirect
