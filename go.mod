@@ -4,7 +4,7 @@ go 1.26.0
 
 require (
 	github.com/gospider007/gson v0.0.0-20260413012738-f5f8d4b074a9
-	github.com/gospider007/requests v0.0.0-20260427071506-6399dd539db3
+	github.com/gospider007/requests v0.0.0-20260427071554-74d2f17224e3
 )
 
 require (
