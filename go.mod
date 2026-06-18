@@ -3,8 +3,8 @@ module github.com/gospider007/elastic
 go 1.26.0
 
 require (
-	github.com/gospider007/gson v0.0.0-20260616064542-ece54a65b8db
-	github.com/gospider007/requests v0.0.0-20260616064939-7dd43f18aed9
+	github.com/gospider007/gson v0.0.0-20260618004449-331770ee92ab
+	github.com/gospider007/requests v0.0.0-20260618004654-6b5483a2f913
 )
 
 require (
@@ -36,7 +36,7 @@ require (
 	github.com/gospider007/netx v0.0.0-20260615055712-8dbf3167e9cd // indirect
 	github.com/gospider007/re v0.0.0-20260227072205-6223d82a3dab // indirect
 	github.com/gospider007/tools v0.0.0-20260612054000-7cbe6eb3212d // indirect
-	github.com/gospider007/websocket v0.0.0-20260616064703-7da23782ee80 // indirect
+	github.com/gospider007/websocket v0.0.0-20260618004654-2817ccd4fe3d // indirect
 	github.com/hashicorp/golang-lru/v2 v2.0.7 // indirect
 	github.com/json-iterator/go v1.1.12 // indirect
 	github.com/klauspost/compress v1.18.6 // indirect
