@@ -4,7 +4,7 @@ go 1.26.0
 
 require (
 	github.com/gospider007/gson v0.0.0-20260701135210-05cb1425858d
-	github.com/gospider007/requests v0.0.0-20260701150250-19aceb513d54
+	github.com/gospider007/requests v0.0.0-20260708004256-b74808028190
 )
 
 require (
@@ -68,9 +68,9 @@ require (
 	golang.org/x/image v0.43.0 // indirect
 	golang.org/x/mod v0.37.0 // indirect
 	golang.org/x/net v0.56.0 // indirect
-	golang.org/x/sync v0.21.0 // indirect
-	golang.org/x/sys v0.46.0 // indirect
-	golang.org/x/text v0.38.0 // indirect
+	golang.org/x/sync v0.22.0 // indirect
+	golang.org/x/sys v0.47.0 // indirect
+	golang.org/x/text v0.39.0 // indirect
 	golang.org/x/tools v0.47.0 // indirect
 	gopkg.in/errgo.v2 v2.1.0 // indirect
 )
