@@ -133,9 +133,11 @@ type SearchResults struct {
 }
 
 func (obj *SearchResults) Next(ctx context.Context) (ok bool) {
+	log.Print(obj.closed)
 	if obj.closed {
 		return false
 	}
+
 	if !obj.init {
 		obj.init = true
 	} else {
@@ -259,6 +261,7 @@ func (obj *Client) Searchs(ctx context.Context, index string, data any) (*Search
 	if !hits.Exists() {
 		return nil, errors.New("not found hits")
 	}
+	// log.Print(hits.Get("hits").Array())
 	return &SearchResults{
 		scroll_id: jsonData.Get("_scroll_id").String(),
 		datas:     hits.Get("hits").Array(),
