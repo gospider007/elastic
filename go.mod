@@ -1,6 +1,6 @@
 module github.com/gospider007/elastic
 
-go 1.26.0
+go 1.27.0
 
 require (
 	github.com/gospider007/gson v0.0.0-20260720134949-eddccd657897
